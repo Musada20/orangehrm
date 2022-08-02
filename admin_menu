@@ -1,0 +1,286 @@
+from gettext import find
+from lib2to3.pgen2 import driver
+from re import S
+from selenium.webdriver.support.ui import Select
+from select import select
+import unittest
+import time
+from selenium import webdriver 
+from selenium.webdriver.common.by import By
+from webdriver_manager.chrome import ChromeDriverManager
+
+class TestLogin(unittest.TestCase): 
+
+    def setUp(self): 
+        self.browser = webdriver.Chrome(ChromeDriverManager().install())
+   
+    def test_valid_login(self): #1
+        # steps
+        browser = self.browser
+        browser.get("https://opensource-demo.orangehrmlive.com/index.php/auth/login") 
+        time.sleep(3)
+        browser.find_element(By.ID,"txtUsername").send_keys("admin") 
+        time.sleep(1)
+        browser.find_element(By.ID,"txtPassword").send_keys("admin123") 
+        time.sleep(1)
+        browser.find_element(By.ID,"btnLogin").click()
+        time.sleep(3)   
+         
+        #validation
+        response_data = browser.find_element(By.ID,"swal2-title").text
+        response_message = browser.find_element(By.ID,"swal2-content").text
+
+        self.assertIn('berhasil', response_data)
+        self.assertEqual(response_message, 'created user!')
+    
+    def test_unresgister_user_login(self): #2
+        # steps
+        browser = self.browser
+        browser.get("https://opensource-demo.orangehrmlive.com/index.php/auth/login") 
+        time.sleep(3)
+        browser.find_element(By.ID,"txtUsername").send_keys("adadeh") 
+        time.sleep(1)
+        browser.find_element(By.ID,"txtPassword").send_keys("admin123") 
+        time.sleep(1)
+        browser.find_element(By.ID,"btnLogin").click()
+        time.sleep(3)  
+
+    def test_wrongpassword_login(self): #3
+        # steps
+        browser = self.browser
+        browser.get("https://opensource-demo.orangehrmlive.com/index.php/auth/login") 
+        time.sleep(3)
+        browser.find_element(By.ID,"txtUsername").send_keys("admin") 
+        time.sleep(1)
+        browser.find_element(By.ID,"txtPassword").send_keys("admin") 
+        time.sleep(1)
+        browser.find_element(By.ID,"btnLogin").click()
+        time.sleep(3)  
+
+    def tearDown(self): 
+        self.browser.close()
+
+class AdminMenu(unittest.TestCase): 
+
+    def setUp(self): 
+        self.browser = webdriver.Chrome(ChromeDriverManager().install()) 
+    
+    def test_valid_add_user_management(self): #4
+        # steps
+        browser = self.browser
+        browser.get("https://opensource-demo.orangehrmlive.com/index.php/auth/login") 
+        time.sleep(3)
+        browser.find_element(By.ID,"txtUsername").send_keys("admin") 
+        time.sleep(1)
+        browser.find_element(By.ID,"txtPassword").send_keys("admin123") 
+        time.sleep(1)
+        browser.find_element(By.ID,"btnLogin").click()
+        time.sleep(1)
+        browser.find_element(By.ID,"menu_admin_viewAdminModule").click() 
+        time.sleep(1)
+        browser.find_element(By.ID,"menu_admin_UserManagement").click() 
+        time.sleep(1)
+        browser.find_element(By.ID,"btnAdd").click()
+        time.sleep(1)
+        browser.find_element(By.ID,"systemUser_userType").click()
+        time.sleep(1)
+        dd1 = Select(browser.find_element(By.ID, 'systemUser_userType'))
+        dd1.select_by_value('2')
+        time.sleep(1)
+        browser.find_element(By.ID,"systemUser_employeeName_empName").send_keys("Anthony Nolan") 
+        time.sleep(1)
+        browser.find_element(By.ID,"systemUser_userName").send_keys("roles") 
+        time.sleep(1)
+        dd2 = Select(browser.find_element(By.ID, "systemUser_status"))
+        dd2.select_by_value('1')
+        time.sleep(1)
+        browser.find_element(By.ID,"systemUser_password").send_keys(".Arialblack98") 
+        time.sleep(1)
+        browser.find_element(By.ID,"systemUser_confirmPassword").send_keys(".Arialblack98") 
+        time.sleep(1)
+        browser.find_element(By.ID,"btnSave").click() 
+        time.sleep(1)
+    
+    def test_employee_name_unreq_pass(self): #5
+        # steps
+        browser = self.browser
+        browser.get("https://opensource-demo.orangehrmlive.com/index.php/auth/login") 
+        time.sleep(3)
+        browser.find_element(By.ID,"txtUsername").send_keys("admin") 
+        time.sleep(1)
+        browser.find_element(By.ID,"txtPassword").send_keys("admin123") 
+        time.sleep(1)
+        browser.find_element(By.ID,"btnLogin").click()
+        time.sleep(1)
+        browser.find_element(By.ID,"menu_admin_viewAdminModule").click() 
+        time.sleep(1)
+        browser.find_element(By.ID,"menu_admin_UserManagement").click() 
+        time.sleep(1)
+        browser.find_element(By.ID,"btnAdd").click()
+        time.sleep(1)
+        browser.find_element(By.ID,"systemUser_userType").click()
+        time.sleep(1)
+        dd1 = Select(browser.find_element(By.ID, 'systemUser_userType'))
+        dd1.select_by_value('2')
+        time.sleep(1)
+        browser.find_element(By.ID,"systemUser_employeeName_empName").send_keys("Sirius Black") 
+        time.sleep(1)
+        browser.find_element(By.ID,"systemUser_userName").send_keys("roles") 
+        time.sleep(1)
+        dd2 = Select(browser.find_element(By.ID, "systemUser_status"))
+        dd2.select_by_value('1')
+        time.sleep(1)
+        browser.find_element(By.ID,"systemUser_password").send_keys("siriusblack") 
+        time.sleep(1)
+        browser.find_element(By.ID,"systemUser_confirmPassword").send_keys("siriusblack") 
+        time.sleep(1)
+        browser.find_element(By.ID,"btnSave").click() 
+        time.sleep(1)
+
+    def test_employee_name_unreq_pass(self): #6
+        # steps
+        browser = self.browser
+        browser.get("https://opensource-demo.orangehrmlive.com/index.php/auth/login") 
+        time.sleep(3)
+        browser.find_element(By.ID,"txtUsername").send_keys("admin") 
+        time.sleep(1)
+        browser.find_element(By.ID,"txtPassword").send_keys("admin123") 
+        time.sleep(1)
+        browser.find_element(By.ID,"btnLogin").click()
+        time.sleep(1)
+        browser.find_element(By.ID,"menu_admin_viewAdminModule").click() 
+        time.sleep(1)
+        browser.find_element(By.ID,"menu_admin_UserManagement").click() 
+        time.sleep(1)
+        browser.find_element(By.ID,"btnAdd").click()
+        time.sleep(1)
+        browser.find_element(By.ID,"systemUser_userType").click()
+        time.sleep(1)
+        dd1 = Select(browser.find_element(By.ID, 'systemUser_userType'))
+        dd1.select_by_value('2')
+        time.sleep(1)
+        browser.find_element(By.ID,"systemUser_employeeName_empName").send_keys("Sirius Black") 
+        time.sleep(1)
+        browser.find_element(By.ID,"systemUser_userName").send_keys("roles") 
+        time.sleep(1)
+        dd2 = Select(browser.find_element(By.ID, "systemUser_status"))
+        dd2.select_by_value('1')
+        time.sleep(1)
+        browser.find_element(By.ID,"systemUser_password").send_keys("siriusblack") 
+        time.sleep(1)
+        browser.find_element(By.ID,"systemUser_confirmPassword").send_keys("siriusblack") 
+        time.sleep(1)
+        browser.find_element(By.ID,"btnSave").click() 
+        time.sleep(1)
+
+    def test_search_by_username(self): #7
+        # steps
+        browser = self.browser
+        browser.get("https://opensource-demo.orangehrmlive.com/index.php/auth/login") 
+        time.sleep(3)
+        browser.find_element(By.ID,"txtUsername").send_keys("admin") 
+        time.sleep(1)
+        browser.find_element(By.ID,"txtPassword").send_keys("admin123") 
+        time.sleep(1)
+        browser.find_element(By.ID,"btnLogin").click()
+        time.sleep(1)
+        browser.find_element(By.ID,"menu_admin_viewAdminModule").click() 
+        time.sleep(1)
+        browser.find_element(By.ID,"menu_admin_UserManagement").click() 
+        time.sleep(1)
+        browser.find_element(By.ID,"searchSystemUser_userName").send_keys('roles')
+        time.sleep(1)
+        browser.find_element(By.ID,"searchBtn").click() 
+        time.sleep(1)
+
+    def test_search_by_userrole(self): #8
+        # steps
+        browser = self.browser
+        browser.get("https://opensource-demo.orangehrmlive.com/index.php/auth/login") 
+        time.sleep(3)
+        browser.find_element(By.ID,"txtUsername").send_keys("admin") 
+        time.sleep(1)
+        browser.find_element(By.ID,"txtPassword").send_keys("admin123") 
+        time.sleep(1)
+        browser.find_element(By.ID,"btnLogin").click()
+        time.sleep(1)
+        browser.find_element(By.ID,"menu_admin_viewAdminModule").click() 
+        time.sleep(1)
+        browser.find_element(By.ID,"menu_admin_UserManagement").click() 
+        time.sleep(1)
+        dd3 = Select(browser.find_element(By.ID, "searchSystemUser_userType"))
+        dd3.select_by_value('1')
+        time.sleep(1)
+        browser.find_element(By.ID,"searchBtn").click() 
+        time.sleep(1)
+
+    def test_search_by_employee(self): #9
+        # steps
+        browser = self.browser
+        browser.get("https://opensource-demo.orangehrmlive.com/index.php/auth/login") 
+        time.sleep(3)
+        browser.find_element(By.ID,"txtUsername").send_keys("admin") 
+        time.sleep(1)
+        browser.find_element(By.ID,"txtPassword").send_keys("admin123") 
+        time.sleep(1)
+        browser.find_element(By.ID,"btnLogin").click()
+        time.sleep(1)
+        browser.find_element(By.ID,"menu_admin_viewAdminModule").click() 
+        time.sleep(1)
+        browser.find_element(By.ID,"menu_admin_UserManagement").click() 
+        time.sleep(1)
+        browser.find_element(By.ID,"searchSystemUser_employeeName_empName").send_keys('Anthony Nolan    ')
+        time.sleep(1)
+        browser.find_element(By.ID,"searchBtn").click() 
+        time.sleep(1)
+
+    def test_search_by_userrole(self): #10
+        # steps
+        browser = self.browser
+        browser.get("https://opensource-demo.orangehrmlive.com/index.php/auth/login") 
+        time.sleep(3)
+        browser.find_element(By.ID,"txtUsername").send_keys("admin") 
+        time.sleep(1)
+        browser.find_element(By.ID,"txtPassword").send_keys("admin123") 
+        time.sleep(1)
+        browser.find_element(By.ID,"btnLogin").click()
+        time.sleep(1)
+        browser.find_element(By.ID,"menu_admin_viewAdminModule").click() 
+        time.sleep(1)
+        browser.find_element(By.ID,"menu_admin_UserManagement").click() 
+        time.sleep(1)
+        dd3 = Select(browser.find_element(By.ID, "searchSystemUser_status"))
+        dd3.select_by_value('1')
+        time.sleep(1)
+        browser.find_element(By.ID,"searchBtn").click() 
+        time.sleep(1)
+    
+    def test_valid_add_job_title(self): #11
+        # steps
+        browser = self.browser
+        browser.get("https://opensource-demo.orangehrmlive.com/index.php/auth/login") 
+        time.sleep(3)
+        browser.find_element(By.ID,"txtUsername").send_keys("admin") 
+        time.sleep(1)
+        browser.find_element(By.ID,"txtPassword").send_keys("admin123") 
+        time.sleep(1)
+        browser.find_element(By.ID,"btnLogin").click()
+        time.sleep(1)
+        browser.find_element(By.ID,"menu_admin_Job").click() 
+        time.sleep(1)
+        browser.find_element(By.ID,"menu_admin_viewJobTitleList").click() 
+        time.sleep(1)
+        browser.find_element(By.ID,"btnAdd").click()
+        time.sleep(1)
+        browser.find_element(By.ID,"systemUser_employeeName_empName").send_keys("Admin Madu TJ") 
+        time.sleep(1)
+        browser.find_element(By.ID,"systemUser_userName").send_keys("Serve seller madu TJ") 
+        time.sleep(1)
+        browser.find_element(By.ID,"systemUser_password").send_keys(".Arialblack98") 
+        time.sleep(1)
+        file = browser.find_element(By.ID, "")
+        file.send_keys("D:\\Untitiled.jpg")
+        time.sleep(1)
+
+if __name__ == "__main__": 
+    unittest.main()
