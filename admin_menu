@@ -66,6 +66,7 @@ class AdminMenu(unittest.TestCase):
         self.browser = webdriver.Chrome(ChromeDriverManager().install()) 
     
     def test_valid_add_user_management(self): #4
+        username = "calibri" #change username to make it success
         # steps
         browser = self.browser
         browser.get("https://opensource-demo.orangehrmlive.com/index.php/auth/login") 
@@ -87,9 +88,9 @@ class AdminMenu(unittest.TestCase):
         dd1 = Select(browser.find_element(By.ID, 'systemUser_userType'))
         dd1.select_by_value('2')
         time.sleep(1)
-        browser.find_element(By.ID,"systemUser_employeeName_empName").send_keys("Anthony Nolan") 
+        browser.find_element(By.ID,"systemUser_employeeName_empName").send_keys("Charlie Carter") 
         time.sleep(1)
-        browser.find_element(By.ID,"systemUser_userName").send_keys("roles") 
+        browser.find_element(By.ID,"systemUser_userName").send_keys(username) 
         time.sleep(1)
         dd2 = Select(browser.find_element(By.ID, "systemUser_status"))
         dd2.select_by_value('1')
@@ -99,7 +100,18 @@ class AdminMenu(unittest.TestCase):
         browser.find_element(By.ID,"systemUser_confirmPassword").send_keys(".Arialblack98") 
         time.sleep(1)
         browser.find_element(By.ID,"btnSave").click() 
+        time.sleep(3)
+        browser.find_element(By.ID,"searchSystemUser_userName").send_keys(username)
         time.sleep(1)
+        browser.find_element(By.ID,"searchBtn").click() 
+        time.sleep(3)
+
+        #validation
+        data_result = browser.find_element(By.CLASS_NAME, "left").text
+        current_page = browser.current_url
+
+        self.assertIn(username, data_result)
+        self.assertIn('https://opensource-demo.orangehrmlive.com/index.php/admin/viewSystemUsers', current_page)
     
     def test_employee_name_unreq_pass(self): #5
         # steps
